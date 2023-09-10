@@ -64,13 +64,12 @@ namespace e_commerce_website.Controllers
         {
             if (!ModelState.IsValid) return View(registerVM);
 
-            var user = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
-            if (user != null)
+            var useremail = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
+            if (useremail != null)
             {
                 TempData["Error"] = "This email address is already in use";
                 return View(registerVM);
             }
-
             var newUser = new User()
             {
                 FullName = registerVM.FullName,
