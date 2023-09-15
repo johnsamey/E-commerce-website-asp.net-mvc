@@ -37,12 +37,16 @@ namespace e_commerce_website.Controllers
             if (!ModelState.IsValid) return View(loginVM);
 
             var user = await _userManager.FindByEmailAsync(loginVM.EmailAddress);
-            if (user != null)
+            
+            if (user != null )
             {
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+                
                 if (passwordCheck)
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+                    
+                    
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index", "Product");
@@ -64,13 +68,12 @@ namespace e_commerce_website.Controllers
         {
             if (!ModelState.IsValid) return View(registerVM);
 
-            var user = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
-            if (user != null)
+            var useremail = await _userManager.FindByEmailAsync(registerVM.EmailAddress);
+            if (useremail != null)
             {
                 TempData["Error"] = "This email address is already in use";
                 return View(registerVM);
             }
-
             var newUser = new User()
             {
                 FullName = registerVM.FullName,
